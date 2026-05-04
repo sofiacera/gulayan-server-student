@@ -102,6 +102,10 @@ class PlantController extends Controller
    */
   public function destroy(PlantModel $plant)
   {
-    //TODO : implement delete record functionality
+    $plant->delete();
+
+    return response()->json([
+      'message' => 'Plant record deleted successfully'
+    ], 200);
   }
 }
