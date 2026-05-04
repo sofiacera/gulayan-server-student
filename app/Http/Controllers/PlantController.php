@@ -25,7 +25,30 @@ class PlantController extends Controller
    */
   public function store(Request $request)
   {
-    //TODO: implement save record functionality
+    try {
+      $validated = $request->validate([
+        'name' => 'required|string|max:255',
+        'variety' => 'required|string|max:255',
+        'notes' => 'nullable|string',
+        'date_planted' => 'required|date',
+        'seedling_count' => 'required|integer|min:1',
+        'batch_name' => 'required|string|max:255',
+        'starting_fund' => 'required|numeric|min:0',
+        'seedling_source' => 'nullable|string|max:255'
+      ]);
+
+      $plant = PlantModel::create($validated);
+
+      return response()->json([
+        'message' => 'Plant record created successfully',
+        'data' => $plant
+      ], 201);
+    } catch (ValidationException $e) {
+      return response()->json([
+        'message' => 'Validation failed',
+        'errors' => $e->errors()
+      ], 422);
+    }
   }
 
   /**
