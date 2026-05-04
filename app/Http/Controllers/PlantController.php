@@ -56,7 +56,10 @@ class PlantController extends Controller
    */
   public function show(PlantModel $plantController)
   {
-    //
+    return response()->json([
+      'message' => 'Plant record retrieved successfully',
+      'data' => $plantController
+    ], 200);
   }
 
   /**
@@ -64,7 +67,34 @@ class PlantController extends Controller
    */
   public function update(Request $request, PlantModel $plantController)
   {
-    //TODO : implement update record functionality
+    try {
+      $validated = $request->validate([
+        'name' => 'sometimes|required|string|max:255',
+        'variety' => 'sometimes|required|string|max:255',
+        'notes' => 'nullable|string',
+        'date_planted' => 'sometimes|required|date',
+        'seedling_count' => 'sometimes|required|integer|min:1',
+        'batch_name' => 'sometimes|required|string|max:255',
+    $plant->delete();
+
+    return response()->json([
+      'message' => 'Plant record deleted successfully'
+    ], 200);eric|min:0',
+        'seedling_source' => 'nullable|string|max:255'
+      ]);
+
+      $plantController->update($validated);
+
+      return response()->json([
+        'message' => 'Plant record updated successfully',
+        'data' => $plantController->fresh()
+      ], 200);
+    } catch (ValidationException $e) {
+      return response()->json([
+        'message' => 'Validation failed',
+        'errors' => $e->errors()
+      ], 422);
+    }
   }
 
   /**
