@@ -10,12 +10,12 @@ class UserController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        return response()->json([
-            "file" => "index",
-            "class" => "User Controller"
-        ]);
+        $perPage = $request->query('per_page', 15);
+        $users = User::paginate($perPage);
+        
+        return response()->json($users);
     }
 
     /**
@@ -23,10 +23,27 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        return response()->json([
-            "file" => "store",
-            "class" => "User Controller"
-        ]);
+        try {
+            $validated = $request->validate([
+                'first_name' => 'required|string|max:255',
+                'last_name' => 'required|string|max:255',
+                'email' => 'required|email|unique:users,email',
+                'password' => 'required|string|min:8',
+                'role' => 'required|string|in:admin,user,moderator'
+            ]);
+
+            $user = User::create($validated);
+
+            return response()->json([
+                'message' => 'User created successfully',
+                'data' => $user
+            ], 201);
+        } catch (ValidationException $e) {
+            return response()->json([
+                'message' => 'Validation failed',
+                'errors' => $e->errors()
+            ], 422);
+        }
     }
 
     /**
