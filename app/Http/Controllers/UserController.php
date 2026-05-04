@@ -10,12 +10,12 @@ class UserController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        return response()->json([
-            "file" => "index",
-            "class" => "User Controller"
-        ]);
+        $perPage = $request->query('per_page', 15);
+        $users = User::paginate($perPage);
+        
+        return response()->json($users);
     }
 
     /**
