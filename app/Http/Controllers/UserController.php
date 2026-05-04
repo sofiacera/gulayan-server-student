@@ -70,11 +70,7 @@ class UserController extends Controller
                 'password' => 'sometimes|required|string|min:8',
                 'role' => 'sometimes|required|string|in:admin,user,moderator'
             ]);
-$user->delete();
 
-        return response()->json([
-            'message' => 'User deleted successfully'
-        ], 200);
             $user->update($validated);
 
             return response()->json([

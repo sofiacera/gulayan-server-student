@@ -75,11 +75,7 @@ class PlantController extends Controller
         'date_planted' => 'sometimes|required|date',
         'seedling_count' => 'sometimes|required|integer|min:1',
         'batch_name' => 'sometimes|required|string|max:255',
-    $plant->delete();
-
-    return response()->json([
-      'message' => 'Plant record deleted successfully'
-    ], 200);eric|min:0',
+        'starting_fund' => 'sometimes|required|numeric|min:0',
         'seedling_source' => 'nullable|string|max:255'
       ]);
 
